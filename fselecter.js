@@ -15,6 +15,7 @@
 		}
 		var settings = {};
 		$.extend(settings, $.fn.fselecter.defaults, options);
+		
 		return $.fselecter(this, settings);
 	};
 
@@ -24,21 +25,30 @@
 	};
 
 	$._fselecter = function( elm, settings ) {
-		var paddingBlock = this.getHighLightBlock( elm.width() , elm.height() , settings['padding_color'] 
-								, elm.css('padding-top')
-								, elm.css('padding-right')
-								, elm.css('padding-bottom')
-								, elm.css('padding-left')
+		elm = $(elm);
+		var paddingBlock = getHighLightBlock( elm.width() , elm.height() , settings['padding_color'] 
+								, elm.css('padding-top').split('px')[0] - 0 
+								, elm.css('padding-right').split('px')[0] - 0 
+								, elm.css('padding-bottom').split('px')[0] - 0 
+								, elm.css('padding-left').split('px')[0] - 0 
 								);
-		var marginBlock = this.getHighLightBlock( elm.width() , elm.height() , settings['margin_color'] 
-								, elm.css('margin-top')
-								, elm.css('margin-right')
-								, elm.css('margin-bottom')
-								, elm.css('margin-left')
+		var marginBlock = getHighLightBlock( elm.outerWidth() , elm.outerHeight() , settings['margin_color'] 
+								, elm.css('margin-top').split('px')[0] - 0 
+								, elm.css('margin-right').split('px')[0] - 0 
+								, elm.css('margin-bottom').split('px')[0] - 0 
+								, elm.css('margin-left').split('px')[0] - 0 
 								);
 								
-								
-		//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+		//place blocks
+		paddingBlock.appendTo('body').css({
+			top: elm.position()['top'] + ( elm.css('margin-top').split('px')[0] - 0 ) + ( elm.css('border-top-width').split('px')[0] - 0 ) ,
+			left: elm.position()['left'] + ( elm.css('margin-left').split('px')[0] - 0 ) + ( elm.css('border-left-width').split('px')[0] - 0 )
+		});
+		marginBlock.appendTo('body').css({
+			top: elm.position()['top'],
+			left: elm.position()['left']
+		});
+		
 	};
 	
 	// default options
@@ -46,23 +56,23 @@
 		padding_display : true,
 		// border_display : true,
 		margin_display : true ,
-		padding_color : "green",
-		margin_color : "yellow",
+		padding_color : "#C2DDB6",
+		margin_color : "#F8CB9C",
 	};
 	
 	
 	//提供6个代表宽度的数值和一个颜色,生成显示用矩形框体
 	function getHighLightBlock( width , height , color , top , right , bottom , left ){
 		var highLightBlock = $(
-			  "<div class='fselecter_highlight_block' style='position:absolut;'>"
-			+		"<div class='fselecter_highlight_lt fselecter_highlight' style='position:absolut;'></div>"
-			+		"<div class='fselecter_highlight_t fselecter_highlight' style='position:absolut;'></div>"
-			+		"<div class='fselecter_highlight_rt fselecter_highlight' style='position:absolut;'></div>"
-			+		"<div class='fselecter_highlight_l fselecter_highlight' style='position:absolut;'></div>"
-			+		"<div class='fselecter_highlight_r fselecter_highlight' style='position:absolut;'></div>"
-			+		"<div class='fselecter_highlight_lb fselecter_highlight' style='position:absolut;'></div>"
-			+		"<div class='fselecter_highlight_b fselecter_highlight' style='position:absolut;'></div>"
-			+		"<div class='fselecter_highlight_rb fselecter_highlight' style='position:absolut;'></div>"
+			  "<div class='fselecter_highlight_block' style='position:absolute;'>"
+			+		"<div class='fselecter_highlight_lt fselecter_highlight' style='position:absolute;'></div>"
+			+		"<div class='fselecter_highlight_t fselecter_highlight' style='position:absolute;'></div>"
+			+		"<div class='fselecter_highlight_rt fselecter_highlight' style='position:absolute;'></div>"
+			+		"<div class='fselecter_highlight_l fselecter_highlight' style='position:absolute;'></div>"
+			+		"<div class='fselecter_highlight_r fselecter_highlight' style='position:absolute;'></div>"
+			+		"<div class='fselecter_highlight_lb fselecter_highlight' style='position:absolute;'></div>"
+			+		"<div class='fselecter_highlight_b fselecter_highlight' style='position:absolute;'></div>"
+			+		"<div class='fselecter_highlight_rb fselecter_highlight' style='position:absolute;'></div>"
 			+ "</div>"
 			);
 		
@@ -86,19 +96,19 @@
 		/* 防御end */
 		
 		var sPrefix = 'fselecter_highlight_';
-		highLightBlock.width( left+right+width );
-		highLightBlock.height( top+height+bottom );
+		// highLightBlock.width( left+right+width );
+		// highLightBlock.height( top+height+bottom );
 		
-		highLightBlock.find(sPrefix+'lt').css({backgroundColor:color,top:0,left:0,width:left,height:top});
-		highLightBlock.find(sPrefix+'t').css({backgroundColor:color,top:0,left:left,width:width,height:top});
-		highLightBlock.find(sPrefix+'rt').css({backgroundColor:color,top:0,left:left+width,width:left,height:top});
+		highLightBlock.find("."+sPrefix+'lt').css({backgroundColor:color,top:0,left:0,width:left,height:top});
+		highLightBlock.find("."+sPrefix+'t').css({backgroundColor:color,top:0,left:left,width:width,height:top});
+		highLightBlock.find("."+sPrefix+'rt').css({backgroundColor:color,top:0,left:left+width,width:right,height:top});
 		
-		highLightBlock.find(sPrefix+'l').css({backgroundColor:color,top:top,left:0,width:left,height:height});
-		highLightBlock.find(sPrefix+'r').css({backgroundColor:color,top:top,left:left+width,width:right,height:height});
+		highLightBlock.find("."+sPrefix+'l').css({backgroundColor:color,top:top,left:0,width:left,height:height});
+		highLightBlock.find("."+sPrefix+'r').css({backgroundColor:color,top:top,left:left+width,width:right,height:height});
 		
-		highLightBlock.find(sPrefix+'lb').css({backgroundColor:color,top:top+height,left:0,width:left,height:bottom});
-		highLightBlock.find(sPrefix+'b').css({backgroundColor:color,top:top+height,left:left,width:right,height:bottom});
-		highLightBlock.find(sPrefix+'rb').css({backgroundColor:color,top:top+height,left:left+width,width:width,height:bottom});
+		highLightBlock.find("."+sPrefix+'lb').css({backgroundColor:color,top:top+height,left:0,width:left,height:bottom});
+		highLightBlock.find("."+sPrefix+'b').css({backgroundColor:color,top:top+height,left:left,width:width,height:bottom});
+		highLightBlock.find("."+sPrefix+'rb').css({backgroundColor:color,top:top+height,left:left+width,width:right,height:bottom});
 		
 		return highLightBlock;
 	}
