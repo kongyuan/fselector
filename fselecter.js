@@ -21,7 +21,7 @@
 
 	$.fselecter = function(elm, settings) {
 		var e = $(elm)[0];
-		return e.fselecter || (e.fselecter = new jQuery._fselecter(e, settings));
+		return new jQuery._fselecter(e, settings);
 	};
 
 	$._fselecter = function( elm, settings ) {
@@ -31,12 +31,14 @@
 								, elm.css('padding-right').split('px')[0] - 0 
 								, elm.css('padding-bottom').split('px')[0] - 0 
 								, elm.css('padding-left').split('px')[0] - 0 
+								, settings['z_index']
 								);
 		var marginBlock = getHighLightBlock( elm.outerWidth() , elm.outerHeight() , settings['margin_color'] 
 								, elm.css('margin-top').split('px')[0] - 0 
 								, elm.css('margin-right').split('px')[0] - 0 
 								, elm.css('margin-bottom').split('px')[0] - 0 
 								, elm.css('margin-left').split('px')[0] - 0 
+								, settings['z_index']
 								);
 								
 		var backgroundBlock = getHighLightBlock( elm.outerWidth(true) , elm.outerHeight(true) , settings['background_color'] 
@@ -44,6 +46,7 @@
 								, window.screen.availWidth - elm.position().left - elm.outerWidth(true)
 								, document.body.offsetHeight - elm.position().top - elm.outerHeight(true)
 								, elm.position().left
+								, settings['z_index']
 								);
 								
 		//place blocks
@@ -76,7 +79,7 @@
 	};
 	
 	//提供6个代表宽度的数值和一个颜色,生成显示用矩形框体
-	function getHighLightBlock( width , height , color , top , right , bottom , left ){
+	function getHighLightBlock( width , height , color , top , right , bottom , left ,zIndex){
 		var highLightBlock = $(
 			  "<div class='fselecter_highlight_block' style='position:absolute;'>"
 			+		"<div class='fselecter_highlight_lt fselecter_highlight' style='position:absolute; '></div>"
@@ -126,7 +129,7 @@
 		
 		highLightBlock.css({filter:'alpha(opacity=40)','-moz-opacity':40,opacity:'0.4'});
 		
-		highLightBlock.css({'z-index' : settings['z_index']});
+		highLightBlock.css({'z-index' : zIndex});
 		
 		return highLightBlock;
 	}
