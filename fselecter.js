@@ -67,12 +67,12 @@
 	
 	// default options
 	$.fn.fselecter.defaults = {
-		padding_display : true,
-		// border_display : true,
-		margin_display : true ,
-		padding_color : "#C2DDB6",
-		margin_color : "#F8CB9C",
-		background_color : "#999"
+		z_index : 10000
+		, padding_display : true
+		, margin_display : true 
+		, padding_color : "#C2DDB6"
+		, margin_color : "#F8CB9C"
+		, background_color : "#999"
 	};
 	
 	//提供6个代表宽度的数值和一个颜色,生成显示用矩形框体
@@ -113,8 +113,6 @@
 		// highLightBlock.width( left+right+width );
 		// highLightBlock.height( top+height+bottom );
 		
-		// color = "rgba(194,221,182,0.3)";
-		
 		highLightBlock.find("."+sPrefix+'lt').css({backgroundColor:color,top:0,left:0,width:left,height:top});
 		highLightBlock.find("."+sPrefix+'t').css({backgroundColor:color,top:0,left:left,width:width,height:top});
 		highLightBlock.find("."+sPrefix+'rt').css({backgroundColor:color,top:0,left:left+width,width:right,height:top});
@@ -127,6 +125,8 @@
 		highLightBlock.find("."+sPrefix+'rb').css({backgroundColor:color,top:top+height,left:left+width,width:right,height:bottom});
 		
 		highLightBlock.css({filter:'alpha(opacity=40)','-moz-opacity':40,opacity:'0.4'});
+		
+		highLightBlock.css({'z-index' : settings['z_index']});
 		
 		return highLightBlock;
 	}
